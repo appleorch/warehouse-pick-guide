@@ -208,7 +208,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--tx);
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <footer id="ft">
-  <span id="fl"><span class="rev" title="Page revision">Rev F</span><span><i style="background:var(--yw)"></i>Pick from this rack section</span><span><i style="background:var(--or);border-radius:50%"></i>Put in this cart slot</span></span>
+  <span id="fl"><span class="rev" title="Page revision">Rev G</span><span><i style="background:var(--yw)"></i>Pick from this rack section</span><span><i style="background:var(--or);border-radius:50%"></i>Put in this cart slot</span></span>
   <span id="fm">Loading&#8230;</span>
   <span id="fx"></span>
 </footer>
@@ -436,8 +436,9 @@ const MIN_BADGE_R=8;     // smallest badge radius when auto-shrinking
    C = Flex-N-Gate logo, Settings > live data monitor;
    D = security hardening: settings validation, picture checks, own-page-only update check, CSP;
    E = page still loads (with a red warning) when the pick-route placeholders are not filled in;
-   F = light mode toggle */
-const PAGE_REV='F';
+   F = light mode toggle;
+   G = settings files keep built-in pictures for sections they do not mention; LH built-in layout + pictures */
+const PAGE_REV='G';
 const STORAGE_KEY='warehouse-pick-RH';
 /* RACK_PARTS exactly as written in the HTML file, before this screen's saved edits (for the monitor). */
 let FILE_RACK=JSON.parse(JSON.stringify(RACK_PARTS));
@@ -528,7 +529,9 @@ function applySaved(saved,replaceImages){
     });
   }
   if(saved.images){
-    if(replaceImages)Object.keys(RACK_IMAGES).forEach(k=>{delete RACK_IMAGES[k];});
+    // A settings file replaces this screen's pictures, starting from the built-in ones:
+    // a section the file does not mention keeps its built-in picture; '' removes it.
+    if(replaceImages){Object.keys(RACK_IMAGES).forEach(k=>{delete RACK_IMAGES[k];});Object.assign(RACK_IMAGES,DEFAULT_IMAGES);}
     Object.entries(saved.images).forEach(([k,v])=>{
       if(v)RACK_IMAGES[Number(k)]=v;else delete RACK_IMAGES[Number(k)];
     });
